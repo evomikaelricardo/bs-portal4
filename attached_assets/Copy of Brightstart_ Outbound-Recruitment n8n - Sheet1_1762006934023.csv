@@ -1,0 +1,4 @@
+Result,DateTime,PhoneNumber,ContactName,PreviousLocation,EmploymentPeriod,WorkPerWeek,CanTravel,OneYearExperience,ValidDriverLicense,ReliableTransport,PayRate,DementiaClient,BackgroundCheck,TBTestNegative,CPRCertificate,Experience,ClientType,CaregiverQuality,ClientRefusal,FirstAction,Phone2,EmailAddress
+FAIL,"10/30/2025, 11:51:54 PM",1234567890,John Smith,BrightStar Jakarta,2000,Yes,Yes,Yes,Yes,Yes,,,,,,,,,,,,
+PASS,"10/31/2025, 1:47:12 AM",6311301801,Frederick Alfredo,Jakarta,"2005, for 8 months",Yes,Yes,Yes,No,Yes,yes,No,No concerns shared,No,Yes,Mostly worked in nursing homes,Mostly people with disabilities,"Strong, nice, and polite","Ask the client why they are refusing, and try to find a solution.",Check the client's condition and provide first emergency aid.,6311301801,fred@gmail.com
+FAIL,"10/31/2025, 7:53:04 PM",4311211801,Bruce Wayne,Jakarta,2010 for 8 months,,,,,,,,,,,,,,,,,
