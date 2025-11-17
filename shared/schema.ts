@@ -1,0 +1,85 @@
+import { z } from "zod";
+
+export const candidateEvaluationSchema = z.object({
+  guid: z.string().optional(),
+  result: z.enum(["PASS", "FAIL", "HANGUP"]).optional(),
+  dateTime: z.string(),
+  phoneNumber: z.string(),
+  contactName: z.string(),
+  previousLocation: z.string().optional(),
+  employmentPeriod: z.string().optional(),
+  workPerWeek: z.string().optional(),
+  canTravel: z.string().optional(),
+  oneYearExperience: z.string().optional(),
+  validDriverLicense: z.string().optional(),
+  reliableTransport: z.string().optional(),
+  payRate: z.string().optional(),
+  dementiaClient: z.string().optional(),
+  backgroundCheck: z.string().optional(),
+  tbTestNegative: z.string().optional(),
+  cprCertificate: z.string().optional(),
+  experience: z.string().optional(),
+  clientType: z.string().optional(),
+  caregiverQuality: z.string().optional(),
+  clientRefusal: z.string().optional(),
+  firstAction: z.string().optional(),
+  phone2: z.string().optional(),
+  emailAddress: z.string().optional(),
+  experienceScore: z.string().optional(),
+  compassionScore: z.string().optional(),
+  safetyScore: z.string().optional(),
+  professionalismScore: z.string().optional(),
+  performanceSummary: z.string().optional(),
+  redFlags: z.array(z.string()).optional(),
+  followUpQuestions: z.array(z.string()).optional(),
+  questionsAsked: z.array(z.string()).optional(),
+  callbackDate: z.string().optional(),
+});
+
+export type CandidateEvaluation = z.infer<typeof candidateEvaluationSchema>;
+
+export const customerServiceSchema = z.object({
+  guid: z.string().optional(),
+  dateTime: z.string(),
+  phoneNumber: z.string(),
+  contactName: z.string(),
+  referral: z.string().optional(),
+  serviceExperience: z.string().optional(),
+  zipCode: z.string().optional(),
+  patientIdentity: z.string().optional(),
+  patientProblem: z.string().optional(),
+  serviceHours: z.string().optional(),
+  serviceTime: z.string().optional(),
+  clientAddress: z.string().optional(),
+  clientEmail: z.string().optional(),
+  callbackDate: z.string().optional(),
+  nurseVisit: z.string().optional(),
+});
+
+export type CustomerService = z.infer<typeof customerServiceSchema>;
+
+export const formStaffSubmissionSchema = z.object({
+  guid: z.string().optional(),
+  result: z.string().optional(),
+  dateTime: z.string(),
+  phoneNumber: z.string(),
+  contactName: z.string(),
+  email: z.string().optional(),
+  payRateAcceptance: z.string().optional(),
+  workedBefore: z.string().optional(),
+  willingToTravel: z.string().optional(),
+  hasExperience: z.string().optional(),
+  hasAvailability: z.string().optional(),
+  hasVehicle: z.string().optional(),
+  caregivingBackground: z.string().optional(),
+  hasDementiaExperience: z.string().optional(),
+  hasBackgroundCheckIssues: z.string().optional(),
+  backgroundCheckIssuesDescription: z.string().optional(),
+  backgroundCheckFeeAcceptance: z.string().optional(),
+  canProvideTBTest: z.string().optional(),
+  hasCPRCertification: z.string().optional(),
+  goodCaregiverQualities: z.string().optional(),
+  consentToMessages: z.string().optional(),
+});
+
+export type FormStaffSubmission = z.infer<typeof formStaffSubmissionSchema>;

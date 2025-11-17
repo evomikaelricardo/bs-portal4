@@ -1,0 +1,46 @@
+{
+  "candidates": [
+    {
+      "dateTime": "11/3/2025, 09:25:10",
+      "phoneNumber": "6311201821",
+      "contactName": "Michael Jordan",
+      "result": "PASS",
+      "emailAddress": "michael.jordan@nba.com",
+      "experienceScore": "4",
+      "compassionScore": "4",
+      "safetyScore": "4",
+      "professionalismScore": "4",
+      "performanceSummary": "Michael has experience providing companionship and caring for elderly clients with disabilities. He adapts to client needs and shared a thoughtful example of making a client feel special.",
+      "redFlags": "none",
+      "previousLocation": "none",
+      "employmentPeriod": "never",
+      "workPerWeek": "yes",
+      "canTravel": "yes",
+      "oneYearExperience": "yes",
+      "validDriverLicense": "yes",
+      "reliableTransport": "yes",
+      "payRate": "Yes"
+    },
+    {
+      "dateTime": "11/3/2025, 09:59:57",
+      "phoneNumber": "5311201801",
+      "contactName": "Michael Jackson",
+      "result": "PASS",
+      "emailAddress": "michael.jackson@gmail.com",
+      "experienceScore": "4",
+      "compassionScore": "4",
+      "safetyScore": "3",
+      "professionalismScore": "3",
+      "performanceSummary": "The candidate has two years of experience with elderly clients and shared a story about making a client feel special by taking them on a trip, showing compassion and initiative.",
+      "redFlags": "none",
+      "previousLocation": "None",
+      "employmentPeriod": "Never",
+      "workPerWeek": "Yes",
+      "canTravel": "Yes",
+      "oneYearExperience": "Yes",
+      "validDriverLicense": "Yes",
+      "reliableTransport": "Yes",
+      "payRate": "Yes"
+    }
+  ]
+}

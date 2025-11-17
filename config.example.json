@@ -1,0 +1,4 @@
+{
+  "apiBearerToken": "your-secret-token-here",
+  "n8nApiUrl": "https://n8n.evosmartlife.net/webhook/get-supabase-data"
+}
