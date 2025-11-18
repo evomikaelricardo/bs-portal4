@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { ChevronDown, ChevronRight, Users, UserCog, Phone, MessageSquare, ClipboardList, Building2, UserPlus, ArrowDownToLine, ArrowUpFromLine } from "lucide-react";
+import { ChevronDown, ChevronRight, Users, UserCog, Phone, MessageSquare, ClipboardList, Building2, UserPlus, ArrowDownToLine, ArrowUpFromLine, MapPin } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,6 +13,14 @@ import {
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useLocationContext, type LocationType } from "@/context/LocationContext";
 import logoImage from "@assets/BrightstarlogoTransparent_1762830616887.png";
 
 interface NavItem {
@@ -171,11 +179,13 @@ const navigationStructure: NavItem[] = [
 
 function NavItemComponent({ item, level = 0 }: { item: NavItem; level?: number }) {
   const [location, setLocation] = useLocation();
+  const { location: currentLocation } = useLocationContext();
   const [isOpen, setIsOpen] = useState(false);
 
   const Icon = item.icon;
   const hasChildren = item.children && item.children.length > 0;
-  const isActive = item.path ? location === item.path : false;
+  const fullPath = item.path ? `/${currentLocation}${item.path}` : undefined;
+  const isActive = fullPath ? location === fullPath : false;
 
   if (hasChildren) {
     return (
@@ -217,10 +227,10 @@ function NavItemComponent({ item, level = 0 }: { item: NavItem; level?: number }
       data-testid={`nav-link-${item.title.toLowerCase()}`}
       style={{ paddingLeft: `${level * 0.75 + 0.75}rem` }}
     >
-      <a href={item.path} onClick={(e) => {
+      <a href={fullPath} onClick={(e) => {
         e.preventDefault();
-        if (item.path) {
-          setLocation(item.path);
+        if (fullPath) {
+          setLocation(fullPath);
         }
       }}>
         {Icon && <Icon className="w-4 h-4" />}
@@ -231,6 +241,10 @@ function NavItemComponent({ item, level = 0 }: { item: NavItem; level?: number }
 }
 
 export function AppSidebar() {
+  const { location, setLocation } = useLocationContext();
+
+  const locationLabel = location.charAt(0).toUpperCase() + location.slice(1);
+
   return (
     <Sidebar>
       <div className="p-4 border-b">
@@ -242,6 +256,26 @@ export function AppSidebar() {
         />
       </div>
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel className="flex items-center gap-2">
+            <MapPin className="w-4 h-4" />
+            Location
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <div className="px-2 pb-2">
+              <Select value={location} onValueChange={(value) => setLocation(value as LocationType)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select location" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="baltimore">Baltimore</SelectItem>
+                  <SelectItem value="pittsburgh">Pittsburgh</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
