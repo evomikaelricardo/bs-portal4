@@ -2,7 +2,7 @@ import { useCandidates } from "@/context/CandidateContext";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useLocation } from "wouter";
+import { useLocation, useRoute } from "wouter";
 import { ArrowLeft, TrendingUp, MapPin, Phone, Users, Calendar, FileDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { CustomerService } from "@shared/schema";
@@ -40,15 +40,17 @@ import {
 export default function CustomerCallRecruitmentAnalyticsPage() {
   const { getCustomerDataset, claimDataset, activateOwner } = useCandidates();
   const [, setLocation] = useLocation();
+  const [match, params] = useRoute("/:location/customers/call/recruitment/inbound/analytics");
+  const location = params?.location || "baltimore";
   
   // Try to get the dataset from context first
   const customerDataset = getCustomerDataset("customerCallRecruitmentInbound");
   
   // Fetch data from API if not in context
   const { data: apiCustomers = [], isLoading } = useQuery<CustomerService[]>({
-    queryKey: ['/api/external/customer-call-recruitment-inbound'],
+    queryKey: ['/api/external/customer-call-recruitment-inbound', location],
     queryFn: async () => {
-      const response = await fetch('/api/external/customer-call-recruitment-inbound', {
+      const response = await fetch(`/api/external/customer-call-recruitment-inbound?location=${location}`, {
         credentials: 'include',
       });
       if (!response.ok) {
@@ -98,7 +100,7 @@ export default function CustomerCallRecruitmentAnalyticsPage() {
           <p className="text-muted-foreground mb-4">
             No customer inquiries found in the database.
           </p>
-          <Button onClick={() => setLocation("/customers/call/recruitment/inbound")}>
+          <Button onClick={() => setLocation(`/${location}/customers/call/recruitment/inbound`)}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Go to Customer Inquiries
           </Button>

@@ -1,4 +1,4 @@
-import { useLocation } from "wouter";
+import { useLocation, useRoute } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { CandidateEvaluation } from "@shared/schema";
 import { generatePDF } from "@/lib/pdfGenerator";
@@ -14,6 +14,9 @@ import { useRef, useEffect } from "react";
 
 export default function CallRecruitmentInbound() {
   const [, setLocation] = useLocation();
+  const [match, params] = useRoute("/:location/staffs/call/recruitment/inbound");
+  const location = params?.location || "baltimore";
+  
   const { toast } = useToast();
   const { 
     candidates: activeCandidates, 
@@ -28,7 +31,16 @@ export default function CallRecruitmentInbound() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: apiCandidates = [], isLoading, isFetching, error, isError, refetch } = useQuery<CandidateEvaluation[]>({
-    queryKey: ['/api/external/call-recruitment-inbound'],
+    queryKey: ['/api/external/call-recruitment-inbound', location],
+    queryFn: async () => {
+      const response = await fetch(`/api/external/call-recruitment-inbound?location=${location}`, {
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data: ${response.statusText}`);
+      }
+      return response.json();
+    },
   });
 
   useEffect(() => {
@@ -51,7 +63,7 @@ export default function CallRecruitmentInbound() {
       const formData = new FormData();
       formData.append('file', file);
       
-      const response = await fetch('/api/external/call-recruitment-inbound/upload', {
+      const response = await fetch(`/api/external/call-recruitment-inbound/upload?location=${location}`, {
         method: 'POST',
         body: formData,
         credentials: 'include',
