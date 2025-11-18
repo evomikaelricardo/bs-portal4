@@ -215,7 +215,7 @@ export default function CandidateTable({
                   <TableCell className="w-[150px] text-left align-middle">
                     <Badge
                       variant={candidate.result === "PASS" ? "default" : "destructive"}
-                      className="font-medium"
+                      className={`font-medium ${candidate.result === "PASS" ? "bg-green-600 hover:bg-green-600/80" : ""}`}
                       data-testid="badge-status"
                     >
                       {candidate.result}
