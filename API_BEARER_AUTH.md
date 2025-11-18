@@ -2,11 +2,26 @@
 
 ## Overview
 
-The following PDF generation endpoints now use Bearer Token authentication instead of session-based authentication:
+The following PDF generation endpoints use Bearer Token authentication instead of session-based authentication:
 
+### Location-Agnostic Endpoints (Backward Compatible)
 1. `POST /api/generate-pdf/staff-form-recruitment`
 2. `POST /api/generate-pdf/customer-call-recruitment`
 3. `POST /api/generate-pdf/staff-call-recruitment`
+
+### Location-Specific Endpoints (Recommended)
+
+**Baltimore:**
+1. `POST /api/baltimore/generate-pdf/staff-form-recruitment`
+2. `POST /api/baltimore/generate-pdf/customer-call-recruitment`
+3. `POST /api/baltimore/generate-pdf/staff-call-recruitment`
+
+**Pittsburgh:**
+1. `POST /api/pittsburgh/generate-pdf/staff-form-recruitment`
+2. `POST /api/pittsburgh/generate-pdf/customer-call-recruitment`
+3. `POST /api/pittsburgh/generate-pdf/staff-call-recruitment`
+
+**Note:** Location-specific endpoints generate PDFs with location names in the filename (e.g., `baltimore_staff_form_submissions_2025-11-18.pdf`)
 
 ## Security Implementation
 
@@ -280,6 +295,75 @@ if response.status_code == 200:
     print('PDF generated successfully!')
 else:
     print('Error:', response.json())
+```
+
+## Location-Specific API Examples
+
+### Baltimore Staff Form Recruitment PDF
+
+```bash
+curl -X POST https://your-replit-url.repl.co/api/baltimore/generate-pdf/staff-form-recruitment \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-secret-bearer-token-here" \
+  -d '{
+    "body": {
+      "candidates": [
+        {
+          "row_number": 17,
+          "GUID": "n6APsA",
+          "result": "PROGRESSING",
+          "location_id": "Baltimore,MD",
+          "date_time": "11/17/2025 01:08:51",
+          "phone_number": 7171234562,
+          "contact_name": "John Doe",
+          "one_year_experience": "Yes",
+          "work_per_week": "Yes",
+          "email_address": "john@example.com"
+        }
+      ]
+    }
+  }' \
+  --output baltimore_staff_form_submissions.pdf
+```
+
+### Pittsburgh Customer Call Recruitment PDF
+
+```bash
+curl -X POST https://your-replit-url.repl.co/api/pittsburgh/generate-pdf/customer-call-recruitment \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-secret-bearer-token-here" \
+  -d '{
+    "customers": [
+      {
+        "dateTime": "2024-01-15T14:30:00",
+        "phoneNumber": "555-0200",
+        "contactName": "Jane Smith",
+        "zipCode": "15201",
+        "serviceExperience": "positive"
+      }
+    ]
+  }' \
+  --output pittsburgh_customer_call_recruitment.pdf
+```
+
+### Baltimore Staff Call Recruitment PDF
+
+```bash
+curl -X POST https://your-replit-url.repl.co/api/baltimore/generate-pdf/staff-call-recruitment \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-secret-bearer-token-here" \
+  -d '{
+    "candidates": [
+      {
+        "dateTime": "2024-01-15T09:00:00",
+        "phoneNumber": "555-0300",
+        "contactName": "Bob Johnson",
+        "result": "PASS",
+        "oneYearExperience": "yes"
+      }
+    ]
+  }' \
+  --output baltimore_staff_call_recruitment.pdf
 ```
 
 ## Error Responses

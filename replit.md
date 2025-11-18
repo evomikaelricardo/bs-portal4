@@ -40,11 +40,23 @@ The backend, powered by Node.js with Express.js, uses Multer for file uploads an
     - **Protected Endpoints**: Include file uploads, PDF generation, and candidate data access.
     - **Public Endpoints**: `/api/health`.
     - **PDF Generation from JSON Endpoints** (Bearer Auth Required): 
-      - `POST /api/generate-pdf/staff-form-recruitment` - Generates PDFs from form submission data
+      - Location-Agnostic Endpoints (Backward Compatible):
+        - `POST /api/generate-pdf/staff-form-recruitment` - Generates PDFs from form submission data
+        - `POST /api/generate-pdf/customer-call-recruitment` - Generates PDFs from CustomerService[] data
+        - `POST /api/generate-pdf/staff-call-recruitment` - Generates PDFs from CandidateEvaluation[] data
+      - Location-Specific Endpoints (Recommended):
+        - Baltimore:
+          - `POST /api/baltimore/generate-pdf/staff-form-recruitment`
+          - `POST /api/baltimore/generate-pdf/customer-call-recruitment`
+          - `POST /api/baltimore/generate-pdf/staff-call-recruitment`
+        - Pittsburgh:
+          - `POST /api/pittsburgh/generate-pdf/staff-form-recruitment`
+          - `POST /api/pittsburgh/generate-pdf/customer-call-recruitment`
+          - `POST /api/pittsburgh/generate-pdf/staff-call-recruitment`
+      - **Features**:
         - Accepts multiple formats: `{ "body": { "candidates": [...] } }` (UI format), `{ "candidates": [...] }`, or direct array `[...]`
         - Special handling: When `result: "PROGRESSING"`, displays green success box instead of qualification score
-      - `POST /api/generate-pdf/customer-call-recruitment` - Generates PDFs from CustomerService[] data
-      - `POST /api/generate-pdf/staff-call-recruitment` - Generates PDFs from CandidateEvaluation[] data
+        - Location-specific endpoints include location name in PDF filename (e.g., `baltimore_staff_form_submissions_2025-11-18.pdf`)
       - **Authentication**: These endpoints use Bearer token authentication stored in `config.json` (see API_BEARER_AUTH.md)
       - **Token Setup**: Configure `apiBearerToken` in `config.json` file (never commit this file to version control)
     - **Response Format**: PDF for generation, JSON for others with consistent error handling.
@@ -77,6 +89,18 @@ The project uses Zod for runtime data validation against a `CandidateEvaluation`
 - **xlsx**: Excel file parsing (for backend uploads).
 
 ## Recent Changes
+
+### November 18, 2025 - Location-Specific PDF Generation APIs
+- **Location-Specific API Endpoints**: Created dedicated PDF generation endpoints for Baltimore and Pittsburgh locations
+  - Added 6 new endpoints: 3 for Baltimore (`/api/baltimore/generate-pdf/*`) and 3 for Pittsburgh (`/api/pittsburgh/generate-pdf/*`)
+  - Each location has its own set of endpoints for:
+    - Staff Form Recruitment PDF generation
+    - Customer Call Recruitment PDF generation
+    - Staff Call Recruitment PDF generation
+  - Location-specific PDFs include location name in filename (e.g., `baltimore_staff_form_submissions_2025-11-18.pdf`, `pittsburgh_customer_call_recruitment_2025-11-18.pdf`)
+  - Original location-agnostic endpoints (`/api/generate-pdf/*`) remain available for backward compatibility
+  - All endpoints use the same Bearer token authentication mechanism
+  - Updated API_BEARER_AUTH.md with comprehensive examples for location-specific endpoints
 
 ### November 18, 2025 - Multi-Location Support Implementation
 - **Multi-Location Architecture**: Added support for two locations (Baltimore and Pittsburgh) with identical features
