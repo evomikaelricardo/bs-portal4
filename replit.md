@@ -26,7 +26,13 @@ The backend, powered by Node.js with Express.js, uses Multer for file uploads an
 - **Form Submission Features**: Supports individual and bulk PDF generation for form submissions, along with a dedicated Form Analytics dashboard presenting an overview, qualifications, compliance, experience, and statistical summaries.
   - **PROGRESSING Status Handling**: When a form submission has `result: "PROGRESSING"`, the PDF displays a green box with "Progressing — all required qualifications & requirements have been met." instead of the standard qualification score. This applies to both UI-generated PDFs and API-generated PDFs.
   - **FAIL Status Handling**: When a form submission has `result: "FAIL"`, the PDF displays a red box with "FAIL" instead of "Qualification Score: 0% - Needs Improvement". This applies to both UI-generated PDFs and API-generated PDFs.
-- **Recruitment Channel Separation**: Distinct data sources and API endpoints for "Text Recruitment" (`Dev-Bsc-Baltimore-Staff-Inbound-Text-Recruitment`), "Call Recruitment" (`Dev-Bsc-Baltimore-Staff-Inbound-Call-Recruitment`), and "Form Recruitment" (`Dev-BSC-Baltimore-Staff-Inbound-Form-Recruitment`), ensuring data isolation.
+- **Multi-Location Support**: The system supports two locations (Baltimore and Pittsburgh) with:
+  - Location selector dropdown in the sidebar navigation
+  - Location-aware routing with all URLs prefixed by location (e.g., `/baltimore/staffs/...`, `/pittsburgh/customers/...`)
+  - Dynamic table name generation based on selected location
+  - Shared N8N API configuration between locations
+  - Data isolation per location
+- **Recruitment Channel Separation**: Distinct data sources and API endpoints for "Text Recruitment", "Call Recruitment", and "Form Recruitment" with location-specific table names (e.g., `Dev-Bsc-Baltimore-Staff-Inbound-Text-Recruitment`, `Dev-Bsc-Pittsburgh-Staff-Inbound-Call-Recruitment`), ensuring data isolation.
 - **Excel Upload Capability**: For text, call, and form recruitment channels, allowing data to be sourced from uploaded Excel files in addition to live databases.
 - **API Design**:
     - **Base URL**: `/api`
@@ -71,6 +77,26 @@ The project uses Zod for runtime data validation against a `CandidateEvaluation`
 - **xlsx**: Excel file parsing (for backend uploads).
 
 ## Recent Changes
+
+### November 18, 2025 - Multi-Location Support Implementation
+- **Multi-Location Architecture**: Added support for two locations (Baltimore and Pittsburgh) with identical features
+  - Created `LocationContext` for global location state management synchronized with URL routing
+  - Added location selector dropdown in sidebar navigation (above menu items)
+  - Updated all routes to include `/:location` parameter (e.g., `/baltimore/staffs/call/cs/inbound`, `/pittsburgh/staffs/form/recruitment/inbound`)
+  - Default location: Baltimore (used for legacy routes without location parameter)
+- **Location-Aware Data Fetching**:
+  - Updated all external API endpoints to accept `location` query parameter
+  - Server dynamically generates table names based on location: `Dev-Bsc-{Location}-{Type}-Inbound-{Channel}-Recruitment`
+  - Examples:
+    - Baltimore Call Recruitment: `Dev-Bsc-Baltimore-Staff-Inbound-Call-Recruitment`
+    - Pittsburgh Form Recruitment: `Dev-BSC-Pittsburgh-Staff-Inbound-Form-Recruitment`
+  - Both locations share the same `n8nApiUrl` and `apiBearerToken` configuration
+  - All recruitment pages (Text, Call, Form, Customer Call) updated to pass location parameter to APIs
+- **URL Structure**: All application paths now prefixed with location:
+  - Staff routes: `/:location/staffs/{channel}/{type}/{direction}`
+  - Customer routes: `/:location/customers/{channel}/{type}/{direction}`
+  - Analytics routes: `/:location/{page}/analytics`
+- **React Query Integration**: Query keys updated to include location parameter preventing cross-location cache conflicts
 
 ### November 17, 2025 - Replit Environment Setup & Docker Configuration
 - Successfully imported GitHub project and configured for Replit environment
