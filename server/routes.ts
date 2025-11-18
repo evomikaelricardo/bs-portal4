@@ -117,6 +117,22 @@ function requireBearerAuth(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
+type LocationType = "baltimore" | "pittsburgh";
+type RecruitmentType = "call" | "text" | "form" | "customerCall";
+
+function getRecruitmentTableName(location: LocationType, type: RecruitmentType): string {
+  const locationCapitalized = location.charAt(0).toUpperCase() + location.slice(1);
+  
+  const tableMap: Record<RecruitmentType, string> = {
+    call: `Dev-Bsc-${locationCapitalized}-Staff-Inbound-Call-Recruitment`,
+    text: `Dev-Bsc-${locationCapitalized}-Staff-Inbound-Text-Recruitment`,
+    form: `Dev-BSC-${locationCapitalized}-Staff-Inbound-Form-Recruitment`,
+    customerCall: `Dev-Bsc-${locationCapitalized}-Customer-Inbound-Call-Recruitment`,
+  };
+  
+  return tableMap[type];
+}
+
 const RECRUITMENT_TABLE_MAP: Record<string, string> = {
   call: "Dev-Bsc-Baltimore-Staff-Inbound-Call-Recruitment",
   text: "Dev-Bsc-Baltimore-Staff-Inbound-Text-Recruitment",
@@ -358,9 +374,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Proxy endpoint for text recruitment inbound
   app.get("/api/external/text-recruitment-inbound", requireAuth, async (req, res) => {
     try {
+      const location = (req.query.location as LocationType) || "baltimore";
+      
+      if (location !== "baltimore" && location !== "pittsburgh") {
+        return res.status(400).json({ error: "Invalid location. Must be 'baltimore' or 'pittsburgh'" });
+      }
+      
       const config = loadConfig();
       const API_URL = config.n8nApiUrl;
-      const TABLE_NAME = RECRUITMENT_TABLE_MAP.text;
+      const TABLE_NAME = getRecruitmentTableName(location, "text");
       
       const response = await fetch(`${API_URL}?table_name=${TABLE_NAME}`, {
         method: 'GET',
@@ -397,9 +419,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Proxy endpoint for call recruitment inbound
   app.get("/api/external/call-recruitment-inbound", requireAuth, async (req, res) => {
     try {
+      const location = (req.query.location as LocationType) || "baltimore";
+      
+      if (location !== "baltimore" && location !== "pittsburgh") {
+        return res.status(400).json({ error: "Invalid location. Must be 'baltimore' or 'pittsburgh'" });
+      }
+      
       const config = loadConfig();
       const API_URL = config.n8nApiUrl;
-      const TABLE_NAME = RECRUITMENT_TABLE_MAP.call;
+      const TABLE_NAME = getRecruitmentTableName(location, "call");
       
       const response = await fetch(`${API_URL}?table_name=${TABLE_NAME}`, {
         method: 'GET',
@@ -550,9 +578,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Proxy endpoint for form recruitment inbound
   app.get("/api/external/form-recruitment-inbound", requireAuth, async (req, res) => {
     try {
+      const location = (req.query.location as LocationType) || "baltimore";
+      
+      if (location !== "baltimore" && location !== "pittsburgh") {
+        return res.status(400).json({ error: "Invalid location. Must be 'baltimore' or 'pittsburgh'" });
+      }
+      
       const config = loadConfig();
       const API_URL = config.n8nApiUrl;
-      const TABLE_NAME = RECRUITMENT_TABLE_MAP.form;
+      const TABLE_NAME = getRecruitmentTableName(location, "form");
       
       const response = await fetch(`${API_URL}?table_name=${TABLE_NAME}`, {
         method: 'GET',
@@ -646,9 +680,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Proxy endpoint for customer call recruitment inbound
   app.get("/api/external/customer-call-recruitment-inbound", requireAuth, async (req, res) => {
     try {
+      const location = (req.query.location as LocationType) || "baltimore";
+      
+      if (location !== "baltimore" && location !== "pittsburgh") {
+        return res.status(400).json({ error: "Invalid location. Must be 'baltimore' or 'pittsburgh'" });
+      }
+      
       const config = loadConfig();
       const API_URL = config.n8nApiUrl;
-      const TABLE_NAME = RECRUITMENT_TABLE_MAP.customerCall;
+      const TABLE_NAME = getRecruitmentTableName(location, "customerCall");
       
       const response = await fetch(`${API_URL}?table_name=${TABLE_NAME}`, {
         method: 'GET',
