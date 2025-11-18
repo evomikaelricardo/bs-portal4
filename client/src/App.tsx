@@ -8,6 +8,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { CandidateProvider } from "@/context/CandidateContext";
 import { CustomerProvider } from "@/context/CustomerContext";
 import { FormCandidateProvider } from "@/context/FormCandidateContext";
+import { LocationProvider } from "@/context/LocationContext";
 import Home from "@/pages/Home";
 import InboundCustomers from "@/pages/InboundCustomers";
 import InboundStaffsForm from "@/pages/InboundStaffsForm";
@@ -100,106 +101,120 @@ function AuthenticatedLayout() {
           <main className="flex-1 overflow-auto">
             <Switch>
               <Route path="/">
-                {() => <Redirect to="/staffs/call/cs/inbound" />}
+                {() => <Redirect to="/baltimore/staffs/call/cs/inbound" />}
               </Route>
 
+              {/* Location-aware routes */}
               {/* Customers Routes */}
               {/* Call - CS */}
-              <Route path="/customers/call/cs/inbound" component={InboundCustomers} />
-              <Route path="/customers/call/cs/outbound" component={OutboundCustomers} />
+              <Route path="/:location/customers/call/cs/inbound" component={InboundCustomers} />
+              <Route path="/:location/customers/call/cs/outbound" component={OutboundCustomers} />
               
               {/* Call - Recruitment */}
-              <Route path="/customers/call/recruitment/inbound" component={CustomerCallRecruitmentInbound} />
-              <Route path="/customers/call/recruitment/outbound" component={OutboundCustomers} />
+              <Route path="/:location/customers/call/recruitment/inbound" component={CustomerCallRecruitmentInbound} />
+              <Route path="/:location/customers/call/recruitment/outbound" component={OutboundCustomers} />
               
               {/* Text - CS */}
-              <Route path="/customers/text/cs/inbound" component={InboundCustomers} />
-              <Route path="/customers/text/cs/outbound" component={OutboundCustomers} />
+              <Route path="/:location/customers/text/cs/inbound" component={InboundCustomers} />
+              <Route path="/:location/customers/text/cs/outbound" component={OutboundCustomers} />
               
               {/* Text - Recruitment */}
-              <Route path="/customers/text/recruitment/inbound" component={InboundCustomers} />
-              <Route path="/customers/text/recruitment/outbound" component={OutboundCustomers} />
+              <Route path="/:location/customers/text/recruitment/inbound" component={InboundCustomers} />
+              <Route path="/:location/customers/text/recruitment/outbound" component={OutboundCustomers} />
               
               {/* Form - CS */}
-              <Route path="/customers/form/cs/inbound" component={InboundCustomers} />
-              <Route path="/customers/form/cs/outbound" component={OutboundCustomers} />
+              <Route path="/:location/customers/form/cs/inbound" component={InboundCustomers} />
+              <Route path="/:location/customers/form/cs/outbound" component={OutboundCustomers} />
               
               {/* Form - Recruitment */}
-              <Route path="/customers/form/recruitment/inbound" component={InboundCustomers} />
-              <Route path="/customers/form/recruitment/outbound" component={OutboundCustomers} />
+              <Route path="/:location/customers/form/recruitment/inbound" component={InboundCustomers} />
+              <Route path="/:location/customers/form/recruitment/outbound" component={OutboundCustomers} />
 
               {/* Staffs Routes */}
               {/* Call - CS */}
-              <Route path="/staffs/call/cs/inbound" component={Home} />
-              <Route path="/staffs/call/cs/outbound" component={OutboundStaffs} />
+              <Route path="/:location/staffs/call/cs/inbound" component={Home} />
+              <Route path="/:location/staffs/call/cs/outbound" component={OutboundStaffs} />
               
               {/* Call - Recruitment */}
-              <Route path="/staffs/call/recruitment/inbound" component={CallRecruitmentInbound} />
-              <Route path="/staffs/call/recruitment/outbound" component={OutboundStaffs} />
+              <Route path="/:location/staffs/call/recruitment/inbound" component={CallRecruitmentInbound} />
+              <Route path="/:location/staffs/call/recruitment/outbound" component={OutboundStaffs} />
               
               {/* Text - CS */}
-              <Route path="/staffs/text/cs/inbound" component={Home} />
-              <Route path="/staffs/text/cs/outbound" component={OutboundStaffs} />
+              <Route path="/:location/staffs/text/cs/inbound" component={Home} />
+              <Route path="/:location/staffs/text/cs/outbound" component={OutboundStaffs} />
               
               {/* Text - Recruitment */}
-              <Route path="/staffs/text/recruitment/inbound" component={TextRecruitmentInbound} />
-              <Route path="/staffs/text/recruitment/outbound" component={OutboundStaffs} />
+              <Route path="/:location/staffs/text/recruitment/inbound" component={TextRecruitmentInbound} />
+              <Route path="/:location/staffs/text/recruitment/outbound" component={OutboundStaffs} />
               
               {/* Form - CS */}
-              <Route path="/staffs/form/cs/inbound" component={InboundStaffsForm} />
-              <Route path="/staffs/form/cs/outbound" component={OutboundStaffs} />
+              <Route path="/:location/staffs/form/cs/inbound" component={InboundStaffsForm} />
+              <Route path="/:location/staffs/form/cs/outbound" component={OutboundStaffs} />
               
               {/* Form - Recruitment */}
-              <Route path="/staffs/form/recruitment/inbound" component={FormRecruitmentInbound} />
-              <Route path="/staffs/form/recruitment/outbound" component={OutboundStaffs} />
-
-              {/* Legacy route redirects */}
-              <Route path="/inbound/staffs/call">
-                {() => <Redirect to="/staffs/call/cs/inbound" />}
-              </Route>
-              <Route path="/inbound/staffs/text">
-                {() => <Redirect to="/staffs/text/cs/inbound" />}
-              </Route>
-              <Route path="/inbound/staffs/form">
-                {() => <Redirect to="/staffs/form/cs/inbound" />}
-              </Route>
-              <Route path="/inbound/customers/call">
-                {() => <Redirect to="/customers/call/cs/inbound" />}
-              </Route>
-              <Route path="/inbound/customers/text">
-                {() => <Redirect to="/customers/text/cs/inbound" />}
-              </Route>
-              <Route path="/inbound/customers/form">
-                {() => <Redirect to="/customers/form/cs/inbound" />}
-              </Route>
-              <Route path="/outbound/customers/call">
-                {() => <Redirect to="/customers/call/cs/outbound" />}
-              </Route>
-              <Route path="/outbound/customers/text">
-                {() => <Redirect to="/customers/text/cs/outbound" />}
-              </Route>
-              <Route path="/outbound/customers/form">
-                {() => <Redirect to="/customers/form/cs/outbound" />}
-              </Route>
-              <Route path="/outbound/staffs/call">
-                {() => <Redirect to="/staffs/call/cs/outbound" />}
-              </Route>
-              <Route path="/outbound/staffs/text">
-                {() => <Redirect to="/staffs/text/cs/outbound" />}
-              </Route>
-              <Route path="/outbound/staffs/form">
-                {() => <Redirect to="/staffs/form/cs/outbound" />}
-              </Route>
+              <Route path="/:location/staffs/form/recruitment/inbound" component={FormRecruitmentInbound} />
+              <Route path="/:location/staffs/form/recruitment/outbound" component={OutboundStaffs} />
 
               {/* Analytics Routes */}
-              <Route path="/staffs/call/recruitment/inbound/analytics" component={AnalyticsPage} />
-              <Route path="/staffs/form/recruitment/inbound/analytics" component={AnalyticsPage} />
-              <Route path="/customers/call/recruitment/inbound/analytics" component={CustomerCallRecruitmentAnalyticsPage} />
-              <Route path="/customer-analytics" component={CustomerAnalyticsPage} />
-              <Route path="/form-analytics" component={FormAnalyticsPage} />
-              
-              {/* Legacy analytics route for backward compatibility with Home and TextRecruitmentInbound */}
-              <Route path="/analytics" component={LegacyAnalyticsPage} />
+              <Route path="/:location/staffs/call/recruitment/inbound/analytics" component={AnalyticsPage} />
+              <Route path="/:location/staffs/form/recruitment/inbound/analytics" component={AnalyticsPage} />
+              <Route path="/:location/customers/call/recruitment/inbound/analytics" component={CustomerCallRecruitmentAnalyticsPage} />
+              <Route path="/:location/customer-analytics" component={CustomerAnalyticsPage} />
+              <Route path="/:location/form-analytics" component={FormAnalyticsPage} />
+              <Route path="/:location/analytics" component={LegacyAnalyticsPage} />
+
+              {/* Legacy route redirects without location - redirect to Baltimore */}
+              <Route path="/staffs/call/cs/inbound">
+                {() => <Redirect to="/baltimore/staffs/call/cs/inbound" />}
+              </Route>
+              <Route path="/staffs/call/cs/outbound">
+                {() => <Redirect to="/baltimore/staffs/call/cs/outbound" />}
+              </Route>
+              <Route path="/inbound/staffs/call">
+                {() => <Redirect to="/baltimore/staffs/call/cs/inbound" />}
+              </Route>
+              <Route path="/inbound/staffs/text">
+                {() => <Redirect to="/baltimore/staffs/text/cs/inbound" />}
+              </Route>
+              <Route path="/inbound/staffs/form">
+                {() => <Redirect to="/baltimore/staffs/form/cs/inbound" />}
+              </Route>
+              <Route path="/inbound/customers/call">
+                {() => <Redirect to="/baltimore/customers/call/cs/inbound" />}
+              </Route>
+              <Route path="/inbound/customers/text">
+                {() => <Redirect to="/baltimore/customers/text/cs/inbound" />}
+              </Route>
+              <Route path="/inbound/customers/form">
+                {() => <Redirect to="/baltimore/customers/form/cs/inbound" />}
+              </Route>
+              <Route path="/outbound/customers/call">
+                {() => <Redirect to="/baltimore/customers/call/cs/outbound" />}
+              </Route>
+              <Route path="/outbound/customers/text">
+                {() => <Redirect to="/baltimore/customers/text/cs/outbound" />}
+              </Route>
+              <Route path="/outbound/customers/form">
+                {() => <Redirect to="/baltimore/customers/form/cs/outbound" />}
+              </Route>
+              <Route path="/outbound/staffs/call">
+                {() => <Redirect to="/baltimore/staffs/call/cs/outbound" />}
+              </Route>
+              <Route path="/outbound/staffs/text">
+                {() => <Redirect to="/baltimore/staffs/text/cs/outbound" />}
+              </Route>
+              <Route path="/outbound/staffs/form">
+                {() => <Redirect to="/baltimore/staffs/form/cs/outbound" />}
+              </Route>
+              <Route path="/analytics">
+                {() => <Redirect to="/baltimore/analytics" />}
+              </Route>
+              <Route path="/customer-analytics">
+                {() => <Redirect to="/baltimore/customer-analytics" />}
+              </Route>
+              <Route path="/form-analytics">
+                {() => <Redirect to="/baltimore/form-analytics" />}
+              </Route>
 
               <Route component={NotFound} />
             </Switch>
@@ -234,14 +249,16 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <CandidateProvider>
-          <CustomerProvider>
-            <FormCandidateProvider>
-              <Toaster />
-              <AuthenticatedRouter />
-            </FormCandidateProvider>
-          </CustomerProvider>
-        </CandidateProvider>
+        <LocationProvider>
+          <CandidateProvider>
+            <CustomerProvider>
+              <FormCandidateProvider>
+                <Toaster />
+                <AuthenticatedRouter />
+              </FormCandidateProvider>
+            </CustomerProvider>
+          </CandidateProvider>
+        </LocationProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
