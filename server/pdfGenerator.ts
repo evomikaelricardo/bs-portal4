@@ -597,10 +597,6 @@ function calculateQualificationScore(submission: FormStaffSubmission): { score: 
     maxScore++;
     if (submission.hasVehicle.toLowerCase() === "yes") score++;
   }
-  if (submission.hasCPRCertification) {
-    maxScore++;
-    if (submission.hasCPRCertification.toLowerCase() === "yes") score++;
-  }
   if (submission.hasBackgroundCheckIssues) {
     maxScore++;
     if (submission.hasBackgroundCheckIssues.toLowerCase() !== "yes") score++;
@@ -753,7 +749,7 @@ function generateFormSubmissionPage(
   const qualificationsBody: any[] = [
     ['Do you have at least 1 year of professional/paid caregiving experience?', getBooleanDisplay(submission.hasExperience)],
     ['Do you have 15 to 20 hours of availability each week to work?', getBooleanDisplay(submission.hasAvailability)],
-    ['Has Vehicle', getBooleanDisplay(submission.hasVehicle)],
+    ['Do you have a reliable transportation to get to client home', getBooleanDisplay(submission.hasVehicle)],
   ];
   
   if ((submission as any).reliableTransport) {
@@ -763,8 +759,7 @@ function generateFormSubmissionPage(
   qualificationsBody.push(
     ['Are you willing to travel at least 15 minutes to care for a client?', getBooleanDisplay(submission.willingToTravel)],
     ['Our payrate is in Pennsylvania is $16.50 per hour for private pay and $14 per hour for Medicaid cases. Are you ok starting at these rates?', getBooleanDisplay(submission.payRateAcceptance)],
-    ['Worked Before', getBooleanDisplay(submission.workedBefore)],
-    ['CPR Certification', getBooleanDisplay(submission.hasCPRCertification)],
+    ['Have you worked for BrightStar before?', getBooleanDisplay(submission.workedBefore)],
     ['We require 2-step TB test. Do you have a negative 2-step TB test from the past 12 months?', getBooleanDisplay(submission.canProvideTBTest)],
   );
   
@@ -773,7 +768,7 @@ function generateFormSubmissionPage(
   }
   
   qualificationsBody.push(
-    ['Background Check Issues', getBooleanDisplay(submission.hasBackgroundCheckIssues)],
+    ['We do a background check for all new hires. Is there anything you\'d like to let us know ahead of time?', getBooleanDisplay(submission.hasBackgroundCheckIssues)],
     ['We run a background check for all new employees. The cost is $22 and will be taken from your first paycheck. Do you agree to this?', getBooleanDisplay(submission.backgroundCheckFeeAcceptance)],
   );
   
