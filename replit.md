@@ -90,6 +90,21 @@ The project uses Zod for runtime data validation against a `CandidateEvaluation`
 
 ## Recent Changes
 
+### November 19, 2025 - Pittsburgh Staff Form Recruitment Field Enhancements
+- **Extended Form Submission Schema**: Added 15+ Pittsburgh-specific fields to staff form recruitment
+  - Location & Experience: `locationId`, `previousLocation`, `employmentPeriod`, `reliableTransport`, `paResidency` (PA residency for at least 2 years)
+  - Care Details: `careExperience`, `clientType`
+  - Performance Metrics: `experienceScore`, `compassionScore`, `safetyScore`, `professionalismScore`, `performanceSummary`
+  - Follow-up Information: `redFlags`, `followUpQuestions`, `questionsAsked`, `callbackDate`, `consentToMessages`
+- **PDF Generator Updates**: Both client-side and server-side PDF generators updated to render all Pittsburgh fields
+  - Conditional rendering ensures fields only appear when data is present
+  - Consistent formatting between browser-generated and API-generated PDFs
+  - Special handling for array fields (redFlags, followUpQuestions, questionsAsked) displayed as bullet lists
+- **Data Transformation**: Updated `transformFormSubmissions` to map Pittsburgh N8N API fields to schema
+  - Handles snake_case to camelCase conversion (e.g., `pa_residency_for_atleast_2_years` → `paResidency`)
+  - Supports multiple source field formats for backward compatibility
+- **Table Configuration**: Pittsburgh form recruitment uses table name `Dev-BSC-Pittsburgh-Staff-Inbound-Form-Recruitment`
+
 ### November 18, 2025 - Location-Specific PDF Generation APIs
 - **Location-Specific API Endpoints**: Created dedicated PDF generation endpoints for Baltimore and Pittsburgh locations
   - Added 6 new endpoints: 3 for Baltimore (`/api/baltimore/generate-pdf/*`) and 3 for Pittsburgh (`/api/pittsburgh/generate-pdf/*`)
