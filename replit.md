@@ -4,6 +4,16 @@
 
 The Interview Evaluation System is a professional web application designed for HR and recruitment teams. Its primary purpose is to streamline the processing and evaluation of candidate interview data by allowing CSV uploads, data parsing, and comprehensive PDF report generation. It supports both client-side and API-based processing, aiming to modernize and simplify candidate evaluation workflows. The project's ambition is to provide a robust platform for efficient recruitment data management and analysis.
 
+## Recent Changes
+
+**November 19, 2025**: Successfully configured project for Replit environment:
+- Installed all npm dependencies (521 packages)
+- Configured development workflow to run on port 5000 with webview output
+- Verified Vite configuration includes proper Replit proxy settings (`host: "0.0.0.0"`, `allowedHosts: true`)
+- Set up Autoscale deployment with build and run commands
+- Application successfully runs with Express backend and React frontend on single port (5000)
+- Login page loads correctly with BrightStarCare branding
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
