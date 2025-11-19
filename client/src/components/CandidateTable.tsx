@@ -214,8 +214,22 @@ export default function CandidateTable({
                   </TableCell>
                   <TableCell className="w-[150px] text-left align-middle">
                     <Badge
-                      variant={candidate.result === "PASS" ? "default" : "destructive"}
-                      className={`font-medium ${candidate.result === "PASS" ? "bg-green-600 hover:bg-green-600/80" : ""}`}
+                      variant={
+                        candidate.result === "PASS" 
+                          ? "default" 
+                          : candidate.result === "PROGRESSING" || candidate.result === "HANGUP"
+                          ? "secondary"
+                          : "destructive"
+                      }
+                      className={`font-medium ${
+                        candidate.result === "PASS" 
+                          ? "bg-green-600 hover:bg-green-600/80" 
+                          : candidate.result === "PROGRESSING"
+                          ? "bg-blue-600 hover:bg-blue-600/80 text-white"
+                          : candidate.result === "HANGUP"
+                          ? "bg-yellow-500 hover:bg-yellow-500/80 text-white"
+                          : ""
+                      }`}
                       data-testid="badge-status"
                     >
                       {candidate.result}
