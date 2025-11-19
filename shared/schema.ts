@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const candidateEvaluationSchema = z.object({
   guid: z.string().optional(),
-  result: z.enum(["PASS", "FAIL", "HANGUP"]).optional(),
+  result: z.string().optional(),
   dateTime: z.string(),
   phoneNumber: z.string(),
   contactName: z.string(),

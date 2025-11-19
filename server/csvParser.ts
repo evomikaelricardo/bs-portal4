@@ -31,7 +31,7 @@ function parseArrayField(value: string | undefined): string[] {
 function mapRowToCandidate(row: any): CandidateEvaluation {
   return {
     guid: row.GUID || row.guid,
-    result: (row.Result || row.result || "") as "PASS" | "FAIL" | "HANGUP",
+    result: row.Result || row.result || "",
     dateTime: row.DateTime || row.dateTime || "",
     phoneNumber: row.PhoneNumber || row.phoneNumber || "",
     contactName: row.ContactName || row.contactName || "",
@@ -100,11 +100,6 @@ export function parseCSVContent(content: string): ParseResult {
           .map(err => `${err.path.join('.')}: ${err.message}`)
           .join(', ');
         errors.push(`Row ${index + 2}: Validation failed - ${fieldErrors}`);
-        return;
-      }
-
-      if (!candidate.result || (candidate.result !== "PASS" && candidate.result !== "FAIL" && candidate.result !== "HANGUP")) {
-        errors.push(`Row ${index + 2}: Missing or invalid 'Result' field (must be PASS, FAIL, or HANGUP)`);
         return;
       }
 

@@ -30,7 +30,7 @@ export function parseCSV(file: File): Promise<ParseResult> {
           try {
             const candidate: CandidateEvaluation = {
               guid: row.GUID || "",
-              result: row.Result as "PASS" | "FAIL" | "HANGUP",
+              result: row.Result || "",
               dateTime: row.DateTime || "",
               phoneNumber: row.PhoneNumber || "",
               contactName: row.ContactName || "",
