@@ -72,7 +72,7 @@ export function generateFormPDF(submission: FormStaffSubmission) {
   
   doc.setFontSize(20);
   doc.setFont("helvetica", "bold");
-  doc.text("Staff Web Form Submission Report", pageWidth / 2, 20, { align: 'center' });
+  doc.text("Evaluation Report for Caregiver Applicant Submitted via Web Form", pageWidth / 2, 20, { align: 'center' });
   
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
@@ -119,10 +119,10 @@ export function generateFormPDF(submission: FormStaffSubmission) {
   const colWidth = tableWidth / 2;
   
   const applicantInfoBody: any[] = [
-    ['Name', submission.contactName],
+    ['Applicant Name', submission.contactName],
     ['Phone Number', submission.phoneNumber],
     ['Email', submission.email || 'N/A'],
-    ['Location', (submission as any).locationId || 'N/A'],
+    ['Brightcare location', (submission as any).locationId || 'N/A'],
     ['Submission Date', submission.dateTime],
   ];
   
@@ -189,7 +189,7 @@ export function generateFormPDF(submission: FormStaffSubmission) {
   
   autoTable(doc, {
     startY: yPos + 4,
-    head: [['Requirement', 'Status']],
+    head: [['Requirement', 'Response']],
     body: qualificationsBody,
     theme: 'striped',
     tableWidth: 'auto',
@@ -206,8 +206,8 @@ export function generateFormPDF(submission: FormStaffSubmission) {
       cellPadding: { top: 2, right: 5, bottom: 2, left: 5 }
     },
     columnStyles: {
-      0: { cellWidth: colWidth, halign: 'left', valign: 'middle' },
-      1: { cellWidth: colWidth, halign: 'left', valign: 'middle' }
+      0: { cellWidth: colWidth * 1.4, halign: 'left', valign: 'middle' },
+      1: { cellWidth: colWidth * 0.6, halign: 'left', valign: 'middle' }
     },
     margin: { left: 15, right: 15 },
     pageBreak: 'avoid',
@@ -259,8 +259,8 @@ export function generateFormPDF(submission: FormStaffSubmission) {
       cellPadding: { top: 2, right: 5, bottom: 2, left: 5 }
     },
     columnStyles: {
-      0: { cellWidth: colWidth, halign: 'left', valign: 'middle' },
-      1: { cellWidth: colWidth, halign: 'left', valign: 'middle' }
+      0: { cellWidth: colWidth * 1.4, halign: 'left', valign: 'middle' },
+      1: { cellWidth: colWidth * 0.6, halign: 'left', valign: 'middle' }
     },
     margin: { left: 15, right: 15 },
     pageBreak: 'avoid',
