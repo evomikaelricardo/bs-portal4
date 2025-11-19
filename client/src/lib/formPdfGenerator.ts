@@ -72,7 +72,7 @@ export function generateFormPDF(submission: FormStaffSubmission) {
   
   doc.setFontSize(20);
   doc.setFont("helvetica", "bold");
-  doc.text("Evaluation Report for Caregiver Applicant Submitted via Web Form", pageWidth / 2, 20, { align: 'center' });
+  doc.text("Evaluation Report for Caregiver Applicant", pageWidth / 2, 20, { align: 'center' });
   
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
@@ -206,8 +206,8 @@ export function generateFormPDF(submission: FormStaffSubmission) {
       cellPadding: { top: 2, right: 5, bottom: 2, left: 5 }
     },
     columnStyles: {
-      0: { cellWidth: colWidth * 1.4, halign: 'left', valign: 'middle' },
-      1: { cellWidth: colWidth * 0.6, halign: 'left', valign: 'middle' }
+      0: { cellWidth: colWidth * 1.7, halign: 'left', valign: 'middle' },
+      1: { cellWidth: colWidth * 0.3, halign: 'right', valign: 'middle' }
     },
     margin: { left: 15, right: 15 },
     pageBreak: 'avoid',
@@ -259,8 +259,8 @@ export function generateFormPDF(submission: FormStaffSubmission) {
       cellPadding: { top: 2, right: 5, bottom: 2, left: 5 }
     },
     columnStyles: {
-      0: { cellWidth: colWidth * 1.4, halign: 'left', valign: 'middle' },
-      1: { cellWidth: colWidth * 0.6, halign: 'left', valign: 'middle' }
+      0: { cellWidth: colWidth * 1.7, halign: 'left', valign: 'middle' },
+      1: { cellWidth: colWidth * 0.3, halign: 'right', valign: 'middle' }
     },
     margin: { left: 15, right: 15 },
     pageBreak: 'avoid',
