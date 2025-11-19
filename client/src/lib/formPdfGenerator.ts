@@ -118,15 +118,22 @@ export function generateFormPDF(submission: FormStaffSubmission) {
   const tableWidth = pageWidth - 30;
   const colWidth = tableWidth / 2;
   
+  const applicantInfoBody: any[] = [
+    ['Name', submission.contactName],
+    ['Phone Number', submission.phoneNumber],
+    ['Email', submission.email || 'N/A'],
+    ['Location', (submission as any).locationId || 'N/A'],
+    ['Submission Date', submission.dateTime],
+  ];
+  
+  if ((submission as any).previousLocation) {
+    applicantInfoBody.push(['Previous Employment Location', (submission as any).previousLocation || 'N/A']);
+  }
+  
   autoTable(doc, {
     startY: 62,
     head: [['Field', 'Value']],
-    body: [
-      ['Name', submission.contactName],
-      ['Phone Number', submission.phoneNumber],
-      ['Email', submission.email || 'N/A'],
-      ['Submission Date', submission.dateTime],
-    ],
+    body: applicantInfoBody,
     theme: 'striped',
     tableWidth: 'auto',
     headStyles: { 
@@ -153,21 +160,37 @@ export function generateFormPDF(submission: FormStaffSubmission) {
   doc.setFont("helvetica", "bold");
   doc.text("Qualifications & Requirements", 15, yPos);
   
+  const qualificationsBody: any[] = [
+    ['Has Experience', getBooleanDisplay(submission.hasExperience)],
+    ['Has Availability', getBooleanDisplay(submission.hasAvailability)],
+    ['Has Vehicle', getBooleanDisplay(submission.hasVehicle)],
+  ];
+  
+  if ((submission as any).reliableTransport) {
+    qualificationsBody.push(['Reliable Transport', getBooleanDisplay((submission as any).reliableTransport)]);
+  }
+  
+  qualificationsBody.push(
+    ['Willing to Travel', getBooleanDisplay(submission.willingToTravel)],
+    ['Pay Rate Acceptance', getBooleanDisplay(submission.payRateAcceptance)],
+    ['Worked Before', getBooleanDisplay(submission.workedBefore)],
+    ['CPR Certification', getBooleanDisplay(submission.hasCPRCertification)],
+    ['Can Provide TB Test', getBooleanDisplay(submission.canProvideTBTest)],
+  );
+  
+  if ((submission as any).paResidency) {
+    qualificationsBody.push(['PA Residency (2+ years)', getBooleanDisplay((submission as any).paResidency)]);
+  }
+  
+  qualificationsBody.push(
+    ['Background Check Issues', getBooleanDisplay(submission.hasBackgroundCheckIssues)],
+    ['Background Check Fee Acceptance', getBooleanDisplay(submission.backgroundCheckFeeAcceptance)],
+  );
+  
   autoTable(doc, {
     startY: yPos + 4,
     head: [['Requirement', 'Status']],
-    body: [
-      ['Has Experience', getBooleanDisplay(submission.hasExperience)],
-      ['Has Availability', getBooleanDisplay(submission.hasAvailability)],
-      ['Has Vehicle', getBooleanDisplay(submission.hasVehicle)],
-      ['Willing to Travel', getBooleanDisplay(submission.willingToTravel)],
-      ['Worked Before', getBooleanDisplay(submission.workedBefore)],
-      ['Pay Rate Acceptance', getBooleanDisplay(submission.payRateAcceptance)],
-      ['CPR Certification', getBooleanDisplay(submission.hasCPRCertification)],
-      ['Can Provide TB Test', getBooleanDisplay(submission.canProvideTBTest)],
-      ['Background Check Fee Acceptance', getBooleanDisplay(submission.backgroundCheckFeeAcceptance)],
-      ['Background Check Issues', getBooleanDisplay(submission.hasBackgroundCheckIssues)],
-    ],
+    body: qualificationsBody,
     theme: 'striped',
     tableWidth: 'auto',
     headStyles: { 
@@ -190,27 +213,37 @@ export function generateFormPDF(submission: FormStaffSubmission) {
     pageBreak: 'avoid',
   });
   
-  const yPos2 = (doc as any).lastAutoTable.finalY + 10;
+  let yPos2 = (doc as any).lastAutoTable.finalY + 10;
   const pageHeight = doc.internal.pageSize.getHeight();
   
   if (yPos2 + 30 > pageHeight - 20) {
     doc.addPage();
+    yPos2 = 20;
   }
-  
-  const yPos2Final = yPos2 + 30 > pageHeight - 20 ? 20 : yPos2;
   
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
-  doc.text("Experience & Background", 15, yPos2Final);
+  doc.text("Experience & Background", 15, yPos2);
+  
+  const experienceBody: any[] = [
+    ['Caregiving Background', submission.caregivingBackground || 'N/A'],
+    ['Dementia Experience', getBooleanDisplay(submission.hasDementiaExperience)],
+  ];
+  
+  if ((submission as any).careExperience) {
+    experienceBody.push(['Care Experience', (submission as any).careExperience || 'N/A']);
+  }
+  
+  if ((submission as any).clientType) {
+    experienceBody.push(['Client Type', (submission as any).clientType || 'N/A']);
+  }
+  
+  experienceBody.push(['Background Check Issues Description', submission.backgroundCheckIssuesDescription || 'N/A']);
   
   autoTable(doc, {
-    startY: yPos2Final + 4,
-    head: [['Experience Type', 'Details']],
-    body: [
-      ['Caregiving Background', submission.caregivingBackground || 'N/A'],
-      ['Dementia Experience', getBooleanDisplay(submission.hasDementiaExperience)],
-      ['Good Caregiver Qualities', submission.goodCaregiverQualities || 'N/A'],
-    ],
+    startY: yPos2 + 4,
+    head: [['Category', 'Details']],
+    body: experienceBody,
     theme: 'striped',
     tableWidth: 'auto',
     headStyles: { 
@@ -240,44 +273,115 @@ export function generateFormPDF(submission: FormStaffSubmission) {
     yPos3 = 20;
   }
   
-  if (submission.hasBackgroundCheckIssues?.toLowerCase() === "yes" && submission.backgroundCheckIssuesDescription) {
+  // Performance Scores (Pittsburgh-specific)
+  if ((submission as any).experienceScore || (submission as any).compassionScore || (submission as any).safetyScore || (submission as any).professionalismScore) {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
-    doc.text("Background Check Issues", 15, yPos3);
+    doc.text("Performance Scores", 15, yPos3);
+    
+    const scoreBody: any[] = [];
+    if ((submission as any).experienceScore) scoreBody.push(['Experience Score', (submission as any).experienceScore]);
+    if ((submission as any).compassionScore) scoreBody.push(['Compassion Score', (submission as any).compassionScore]);
+    if ((submission as any).safetyScore) scoreBody.push(['Safety Score', (submission as any).safetyScore]);
+    if ((submission as any).professionalismScore) scoreBody.push(['Professionalism Score', (submission as any).professionalismScore]);
     
     autoTable(doc, {
       startY: yPos3 + 4,
-      body: [[submission.backgroundCheckIssuesDescription]],
+      head: [['Metric', 'Score']],
+      body: scoreBody,
       theme: 'striped',
       tableWidth: 'auto',
-      styles: { 
-        cellPadding: 3, 
-        fontSize: 10,
+      headStyles: { 
+        fillColor: [59, 130, 246], 
+        textColor: 255, 
+        halign: 'left', 
+        valign: 'middle',
+        cellPadding: { top: 2, right: 5, bottom: 2, left: 5 }
+      },
+      bodyStyles: {
         halign: 'left',
         valign: 'middle',
-        fillColor: [254, 226, 226]
+        cellPadding: { top: 2, right: 5, bottom: 2, left: 5 }
+      },
+      columnStyles: {
+        0: { cellWidth: colWidth, halign: 'left', valign: 'middle' },
+        1: { cellWidth: colWidth, halign: 'left', valign: 'middle' }
       },
       margin: { left: 15, right: 15 },
       pageBreak: 'avoid',
     });
     
     yPos3 = (doc as any).lastAutoTable.finalY + 10;
+    if (yPos3 + 30 > pageHeight - 20) {
+      doc.addPage();
+      yPos3 = 20;
+    }
   }
   
-  if (yPos3 + 20 > pageHeight - 20) {
-    doc.addPage();
-    yPos3 = 20;
+  // Performance Summary (Pittsburgh-specific)
+  if ((submission as any).performanceSummary) {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("Performance Summary", 15, yPos3);
+    
+    autoTable(doc, {
+      startY: yPos3 + 4,
+      body: [[(submission as any).performanceSummary || 'None']],
+      theme: 'striped',
+      tableWidth: 'auto',
+      styles: { 
+        cellPadding: 3, 
+        fontSize: 10,
+        halign: 'left',
+        valign: 'middle'
+      },
+      margin: { left: 15, right: 15 },
+      pageBreak: 'avoid',
+    });
+    
+    yPos3 = (doc as any).lastAutoTable.finalY + 10;
+    if (yPos3 + 30 > pageHeight - 20) {
+      doc.addPage();
+      yPos3 = 20;
+    }
   }
   
+  // Red Flags (Pittsburgh-specific)
+  if ((submission as any).redFlags) {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("Red Flag(s)", 15, yPos3);
+    
+    autoTable(doc, {
+      startY: yPos3 + 4,
+      body: [[(submission as any).redFlags || 'None']],
+      theme: 'striped',
+      tableWidth: 'auto',
+      styles: { 
+        cellPadding: 3, 
+        fontSize: 10,
+        halign: 'left',
+        valign: 'middle'
+      },
+      margin: { left: 15, right: 15 },
+      pageBreak: 'avoid',
+    });
+    
+    yPos3 = (doc as any).lastAutoTable.finalY + 10;
+    if (yPos3 + 30 > pageHeight - 20) {
+      doc.addPage();
+      yPos3 = 20;
+    }
+  }
+  
+  // Good Caregiver Qualities
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
-  doc.text("Consent & Compliance", 15, yPos3);
+  doc.text("Good Caregiver Qualities", 15, yPos3);
   
   autoTable(doc, {
     startY: yPos3 + 4,
-    body: [
-      ['Consent to Messages: ' + getBooleanDisplay(submission.consentToMessages)]
-    ],
+    body: [[submission.goodCaregiverQualities || 'None provided']],
     theme: 'striped',
     tableWidth: 'auto',
     styles: { 
@@ -290,12 +394,125 @@ export function generateFormPDF(submission: FormStaffSubmission) {
     pageBreak: 'avoid',
   });
   
-  const finalY = (doc as any).lastAutoTable.finalY;
+  yPos3 = (doc as any).lastAutoTable.finalY + 10;
+  if (yPos3 + 30 > pageHeight - 20) {
+    doc.addPage();
+    yPos3 = 20;
+  }
   
+  // Follow-up Questions (Pittsburgh-specific)
+  if ((submission as any).followUpQuestions) {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("Follow-up Questions", 15, yPos3);
+    
+    autoTable(doc, {
+      startY: yPos3 + 4,
+      body: [[(submission as any).followUpQuestions || 'None']],
+      theme: 'striped',
+      tableWidth: 'auto',
+      styles: { 
+        cellPadding: 3, 
+        fontSize: 10,
+        halign: 'left',
+        valign: 'middle'
+      },
+      margin: { left: 15, right: 15 },
+      pageBreak: 'avoid',
+    });
+    
+    yPos3 = (doc as any).lastAutoTable.finalY + 10;
+    if (yPos3 + 30 > pageHeight - 20) {
+      doc.addPage();
+      yPos3 = 20;
+    }
+  }
+  
+  // Questions Asked (Pittsburgh-specific)
+  if ((submission as any).questionsAsked) {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("Questions Asked", 15, yPos3);
+    
+    autoTable(doc, {
+      startY: yPos3 + 4,
+      body: [[(submission as any).questionsAsked || 'None']],
+      theme: 'striped',
+      tableWidth: 'auto',
+      styles: { 
+        cellPadding: 3, 
+        fontSize: 10,
+        halign: 'left',
+        valign: 'middle'
+      },
+      margin: { left: 15, right: 15 },
+      pageBreak: 'avoid',
+    });
+    
+    yPos3 = (doc as any).lastAutoTable.finalY + 10;
+    if (yPos3 + 30 > pageHeight - 20) {
+      doc.addPage();
+      yPos3 = 20;
+    }
+  }
+  
+  // Callback Date (Pittsburgh-specific)
+  if ((submission as any).callbackDate) {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("Callback Date", 15, yPos3);
+    
+    autoTable(doc, {
+      startY: yPos3 + 4,
+      body: [[(submission as any).callbackDate || 'None']],
+      theme: 'striped',
+      tableWidth: 'auto',
+      styles: { 
+        cellPadding: 3, 
+        fontSize: 10,
+        halign: 'left',
+        valign: 'middle'
+      },
+      margin: { left: 15, right: 15 },
+      pageBreak: 'avoid',
+    });
+    
+    yPos3 = (doc as any).lastAutoTable.finalY + 10;
+    if (yPos3 + 30 > pageHeight - 20) {
+      doc.addPage();
+      yPos3 = 20;
+    }
+  }
+  
+  // Consent & Compliance
+  if (submission.consentToMessages) {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("Consent & Compliance", 15, yPos3);
+    
+    autoTable(doc, {
+      startY: yPos3 + 4,
+      body: [
+        ['Consent to Messages: ' + getBooleanDisplay(submission.consentToMessages)]
+      ],
+      theme: 'striped',
+      tableWidth: 'auto',
+      styles: { 
+        cellPadding: 3, 
+        fontSize: 10,
+        halign: 'left',
+        valign: 'middle'
+      },
+      margin: { left: 15, right: 15 },
+      pageBreak: 'avoid',
+    });
+  }
+  
+  // Footer
   doc.setFontSize(8);
   doc.setTextColor(100, 100, 100);
   doc.text(`Report ID: ${Date.now()}-${submission.phoneNumber}`, 15, pageHeight - 10);
-  doc.text("BrightStart Staff Form Submission System", pageWidth / 2, pageHeight - 10, { align: 'center' });
+  doc.text("BrightStar Staff Form Submission System", pageWidth / 2, pageHeight - 10, { align: 'center' });
   
   const fileName = `${submission.contactName.replace(/\s+/g, '_')}_Form_${new Date().toISOString().split('T')[0]}.pdf`;
   doc.save(fileName);

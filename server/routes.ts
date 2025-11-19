@@ -653,7 +653,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         backgroundCheckFeeAcceptance: submission.background_check || submission.backgroundCheck || submission.backgroundCheckFeeAcceptance,
         
         previousLocation: submission.previous_location || submission.previousLocation,
+        employmentPeriod: submission.employment_period || submission.employmentPeriod,
         reliableTransport: submission.reliable_transport || submission.reliableTransport,
+        paResidency: submission.pa_residency_for_atleast_2_years || submission.paResidency,
         careExperience: submission.care_experience || submission.careExperience,
         clientType: submission.client_type || submission.clientType,
         experienceScore: submission.experience_score || submission.experienceScore,
