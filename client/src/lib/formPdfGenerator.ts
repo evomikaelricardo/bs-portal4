@@ -161,8 +161,8 @@ export function generateFormPDF(submission: FormStaffSubmission) {
   doc.text("Qualifications & Requirements", 15, yPos);
   
   const qualificationsBody: any[] = [
-    ['Has Experience', getBooleanDisplay(submission.hasExperience)],
-    ['Has Availability', getBooleanDisplay(submission.hasAvailability)],
+    ['Do you have at least 1 year of professional/paid caregiving experience?', getBooleanDisplay(submission.hasExperience)],
+    ['Do you have 15 to 20 hours of availability each week to work?', getBooleanDisplay(submission.hasAvailability)],
     ['Has Vehicle', getBooleanDisplay(submission.hasVehicle)],
   ];
   
@@ -171,20 +171,20 @@ export function generateFormPDF(submission: FormStaffSubmission) {
   }
   
   qualificationsBody.push(
-    ['Willing to Travel', getBooleanDisplay(submission.willingToTravel)],
-    ['Pay Rate Acceptance', getBooleanDisplay(submission.payRateAcceptance)],
+    ['Are you willing to travel at least 15 minutes to care for a client?', getBooleanDisplay(submission.willingToTravel)],
+    ['Our payrate is in Pennsylvania is $16.50 per hour for private pay and $14 per hour for Medicaid cases. Are you ok starting at these rates?', getBooleanDisplay(submission.payRateAcceptance)],
     ['Worked Before', getBooleanDisplay(submission.workedBefore)],
     ['CPR Certification', getBooleanDisplay(submission.hasCPRCertification)],
-    ['Can Provide TB Test', getBooleanDisplay(submission.canProvideTBTest)],
+    ['We require 2-step TB test. Do you have a negative 2-step TB test from the past 12 months?', getBooleanDisplay(submission.canProvideTBTest)],
   );
   
   if ((submission as any).paResidency) {
-    qualificationsBody.push(['PA Residency (2+ years)', getBooleanDisplay((submission as any).paResidency)]);
+    qualificationsBody.push(['Have you been a resident of Pennsylvania for at least 2 years?', getBooleanDisplay((submission as any).paResidency)]);
   }
   
   qualificationsBody.push(
     ['Background Check Issues', getBooleanDisplay(submission.hasBackgroundCheckIssues)],
-    ['Background Check Fee Acceptance', getBooleanDisplay(submission.backgroundCheckFeeAcceptance)],
+    ['We run a background check for all new employees. The cost is $22 and will be taken from your first paycheck. Do you agree to this?', getBooleanDisplay(submission.backgroundCheckFeeAcceptance)],
   );
   
   autoTable(doc, {
@@ -227,7 +227,7 @@ export function generateFormPDF(submission: FormStaffSubmission) {
   
   const experienceBody: any[] = [
     ['Caregiving Background', submission.caregivingBackground || 'N/A'],
-    ['Dementia Experience', getBooleanDisplay(submission.hasDementiaExperience)],
+    ['Do you have experience with dementia clients?', getBooleanDisplay(submission.hasDementiaExperience)],
   ];
   
   if ((submission as any).careExperience) {
