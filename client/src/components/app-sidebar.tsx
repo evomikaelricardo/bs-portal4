@@ -270,6 +270,7 @@ export function AppSidebar() {
                 <SelectContent>
                   <SelectItem value="baltimore">Baltimore</SelectItem>
                   <SelectItem value="pittsburgh">Pittsburgh</SelectItem>
+                  <SelectItem value="pennsylvania">Pennsylvania</SelectItem>
                 </SelectContent>
               </Select>
             </div>

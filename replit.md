@@ -6,6 +6,15 @@ The Interview Evaluation System is a professional web application designed for H
 
 ## Recent Changes
 
+**November 23, 2025**: Added Pennsylvania location support:
+- Added "pennsylvania" to LocationType in both client and server
+- Updated LocationContext to handle Pennsylvania in URL parsing and state management
+- Added Pennsylvania to sidebar location dropdown
+- Created Pennsylvania-specific API endpoints for PDF generation (staff-form-recruitment, customer-call-recruitment, staff-call-recruitment)
+- Updated route validations to accept Pennsylvania as a valid location parameter
+- Pennsylvania shares the same `apiBearerToken` and `n8nApiUrl` configuration variables as Baltimore and Pittsburgh
+- Removed unused RECRUITMENT_TABLE_MAP constant
+
 **November 19, 2025**: Successfully configured project for Replit environment:
 - Installed all npm dependencies (521 packages)
 - Configured development workflow to run on port 5000 with webview output
@@ -34,7 +43,7 @@ The backend, powered by Node.js with Express.js, uses Multer for file uploads an
 - **PDF Export**: One-click export of all analytics data into a professionally formatted PDF report, including special handling for "PROGRESSING" (green box) and "FAIL" (red box) statuses instead of qualification scores.
 - **Authentication**: Secure login/logout using hardcoded credentials ("bsadmin", "bspass2025?").
 - **Form Submission Features**: Supports individual and bulk PDF generation for form submissions, with a dedicated Form Analytics dashboard. Includes special rendering for "PROGRESSING" and "FAIL" results in PDFs.
-- **Multi-Location Support**: Supports two locations (Baltimore and Pittsburgh) with a location selector, location-aware routing, dynamic table name generation, and data isolation per location.
+- **Multi-Location Support**: Supports three locations (Baltimore, Pittsburgh, and Pennsylvania) with a location selector, location-aware routing, dynamic table name generation, and data isolation per location.
 - **Recruitment Channel Separation**: Distinct data sources and API endpoints for "Text Recruitment", "Call Recruitment", and "Form Recruitment" with location-specific table names.
 - **Excel Upload Capability**: Allows data sourcing from uploaded Excel files for all recruitment channels.
 - **API Design**:
@@ -42,7 +51,7 @@ The backend, powered by Node.js with Express.js, uses Multer for file uploads an
     - **Authentication Endpoints**: `/api/auth/login`, `/api/auth/logout`, `/api/auth/session`.
     - **Protected Endpoints**: File uploads, PDF generation, candidate data access.
     - **Public Endpoints**: `/api/health`.
-    - **PDF Generation from JSON Endpoints** (Bearer Auth Required): Includes location-agnostic and location-specific endpoints (e.g., `/api/baltimore/generate-pdf/staff-form-recruitment`). These endpoints handle various input formats and include location in PDF filenames for location-specific requests. Bearer token configured in `config.json` or environment variables.
+    - **PDF Generation from JSON Endpoints** (Bearer Auth Required): Includes location-agnostic and location-specific endpoints (e.g., `/api/baltimore/generate-pdf/staff-form-recruitment`, `/api/pittsburgh/generate-pdf/staff-form-recruitment`, `/api/pennsylvania/generate-pdf/staff-form-recruitment`). These endpoints handle various input formats and include location in PDF filenames for location-specific requests. Bearer token configured in `config.json` or environment variables.
     - **Response Format**: PDF for generation, JSON for others with consistent error handling.
 
 ### System Design Choices

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useLocation } from "wouter";
 
-export type LocationType = "baltimore" | "pittsburgh";
+export type LocationType = "baltimore" | "pittsburgh" | "pennsylvania";
 
 interface LocationContextType {
   location: LocationType;
@@ -26,7 +26,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
     const pathParts = urlPath.split("/").filter(Boolean);
     if (pathParts.length > 0) {
       const locationFromUrl = pathParts[0].toLowerCase();
-      if (locationFromUrl === "baltimore" || locationFromUrl === "pittsburgh") {
+      if (locationFromUrl === "baltimore" || locationFromUrl === "pittsburgh" || locationFromUrl === "pennsylvania") {
         setCurrentLocation(locationFromUrl);
       }
     }
@@ -38,7 +38,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
     const pathParts = urlPath.split("/").filter(Boolean);
     if (pathParts.length > 0) {
       const currentLocationInUrl = pathParts[0].toLowerCase();
-      if (currentLocationInUrl === "baltimore" || currentLocationInUrl === "pittsburgh") {
+      if (currentLocationInUrl === "baltimore" || currentLocationInUrl === "pittsburgh" || currentLocationInUrl === "pennsylvania") {
         pathParts[0] = newLocation;
       } else {
         pathParts.unshift(newLocation);

@@ -117,7 +117,7 @@ function requireBearerAuth(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-type LocationType = "baltimore" | "pittsburgh";
+type LocationType = "baltimore" | "pittsburgh" | "pennsylvania";
 type RecruitmentType = "call" | "text" | "form" | "customerCall";
 
 function getRecruitmentTableName(location: LocationType, type: RecruitmentType): string {
@@ -133,12 +133,6 @@ function getRecruitmentTableName(location: LocationType, type: RecruitmentType):
   return tableMap[type];
 }
 
-const RECRUITMENT_TABLE_MAP: Record<string, string> = {
-  call: "Dev-Bsc-Baltimore-Staff-Inbound-Call-Recruitment",
-  text: "Dev-Bsc-Baltimore-Staff-Inbound-Text-Recruitment",
-  form: "Dev-BSC-Baltimore-Staff-Inbound-Form-Recruitment",
-  customerCall: "Dev-Bsc-Baltimore-Customer-Inbound-Call-Recruitment",
-};
 
 export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/login", (req, res, next) => {
@@ -211,8 +205,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const location = (req.query.location as LocationType) || "baltimore";
       
-      if (location !== "baltimore" && location !== "pittsburgh") {
-        return res.status(400).json({ error: "Invalid location. Must be 'baltimore' or 'pittsburgh'" });
+      if (location !== "baltimore" && location !== "pittsburgh" && location !== "pennsylvania") {
+        return res.status(400).json({ error: "Invalid location. Must be 'baltimore', 'pittsburgh', or 'pennsylvania'" });
       }
       
       const config = loadConfig();
@@ -256,8 +250,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const location = (req.query.location as LocationType) || "baltimore";
       
-      if (location !== "baltimore" && location !== "pittsburgh") {
-        return res.status(400).json({ error: "Invalid location. Must be 'baltimore' or 'pittsburgh'" });
+      if (location !== "baltimore" && location !== "pittsburgh" && location !== "pennsylvania") {
+        return res.status(400).json({ error: "Invalid location. Must be 'baltimore', 'pittsburgh', or 'pennsylvania'" });
       }
       
       const config = loadConfig();
@@ -415,8 +409,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const location = (req.query.location as LocationType) || "baltimore";
       
-      if (location !== "baltimore" && location !== "pittsburgh") {
-        return res.status(400).json({ error: "Invalid location. Must be 'baltimore' or 'pittsburgh'" });
+      if (location !== "baltimore" && location !== "pittsburgh" && location !== "pennsylvania") {
+        return res.status(400).json({ error: "Invalid location. Must be 'baltimore', 'pittsburgh', or 'pennsylvania'" });
       }
       
       const config = loadConfig();
@@ -517,8 +511,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const location = (req.query.location as LocationType) || "baltimore";
       
-      if (location !== "baltimore" && location !== "pittsburgh") {
-        return res.status(400).json({ error: "Invalid location. Must be 'baltimore' or 'pittsburgh'" });
+      if (location !== "baltimore" && location !== "pittsburgh" && location !== "pennsylvania") {
+        return res.status(400).json({ error: "Invalid location. Must be 'baltimore', 'pittsburgh', or 'pennsylvania'" });
       }
       
       const config = loadConfig();
@@ -847,6 +841,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/pittsburgh/generate-pdf/staff-call-recruitment", requireBearerAuth, async (req, res) => {
     return handleStaffCallRecruitmentPDF(req, res, 'pittsburgh');
+  });
+
+  // Location-specific PDF generation endpoints - Pennsylvania
+  app.post("/api/pennsylvania/generate-pdf/staff-form-recruitment", requireBearerAuth, async (req, res) => {
+    return handleStaffFormRecruitmentPDF(req, res, 'pennsylvania');
+  });
+
+  app.post("/api/pennsylvania/generate-pdf/customer-call-recruitment", requireBearerAuth, async (req, res) => {
+    return handleCustomerCallRecruitmentPDF(req, res, 'pennsylvania');
+  });
+
+  app.post("/api/pennsylvania/generate-pdf/staff-call-recruitment", requireBearerAuth, async (req, res) => {
+    return handleStaffCallRecruitmentPDF(req, res, 'pennsylvania');
   });
 
   // Health check endpoint
